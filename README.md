@@ -5,8 +5,10 @@
 
 <img src="pics/Sergio Perez.jpg" alt="image-20210212182722494" style="zoom: 67%;" align=center/>
    
-<p align="center" face="黑体">
-   You could do anything you want if you put your mind to it
+<p align="center">
+   <font face="微软雅黑" >
+      You could do anything you want if you put your mind to it
+   </font>
 </p>
 
 <p align="right">
