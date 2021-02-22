@@ -91,3 +91,13 @@ public:
 };
 ```
 
+小结一下：
+
+- 时间复杂度$O(N)$：需要遍历整个数组
+- 空间复杂度$O(N)$：需要数组长度的$dp$数组来存取走到当前房屋时候的最大利益
+
+参考资料：
+
+- [@程序员Carl：动态规划：开始打家劫舍！](https://mp.weixin.qq.com/s/UZ31WdLEEFmBegdgLkJ8Dw)
+
+- [@力扣官方题解：打家劫舍](https://leetcode-cn.com/problems/house-robber/solution/da-jia-jie-she-by-leetcode-solution/)
