@@ -1,4 +1,12 @@
-动态规划，英文：Dynamic Programming，简称DP，如果某一问题有很多重叠子问题，使用动态规划是最有效的。所以动态规划中每一个状态是由上一个状态推导出来的，这一点就区别于贪心，因为贪心没有状态推导，而是从局部直接选最优的
+**动态规划**，英文：Dynamic Programming，简称DP，如果某一问题有很多重叠子问题，使用动态规划是最有效的。所以动态规划中每一个状态是由上一个状态推导出来的，这一点就区别于贪心，因为贪心没有状态推导，而是从局部直接选最优的
+
+关于动态规划，这里学习了[@程序员Carl：关于动态规划，你该了解这些！](https://mp.weixin.qq.com/s?__biz=MzUxNjY5NTYxNA==&mid=2247486381&idx=1&sn=b8b913edabdab1208bf677b9578442e7&chksm=f9a238fcced5b1eae8b46972b5f4f9256651fd08d31e78d8aaaa530f56ee2919386cebb1da8a&scene=178&cur_album_id=1679142788606574595#rd)的经验，其将动态规划拆解为五个步骤：
+
+- 确定$dp$数组（$dp\ table$）以及下标的含义
+- 确定递推公式（状态转移公式）
+- $dp$数组如何初始化
+- 确定遍历顺序
+- 距离推导$dp$数组
 
 #### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
 
@@ -101,3 +109,109 @@ public:
 - [@程序员Carl：动态规划：开始打家劫舍！](https://mp.weixin.qq.com/s/UZ31WdLEEFmBegdgLkJ8Dw)
 
 - [@力扣官方题解：打家劫舍](https://leetcode-cn.com/problems/house-robber/solution/da-jia-jie-she-by-leetcode-solution/)
+
+#### [509. 斐波那契数](https://leetcode-cn.com/problems/fibonacci-number/)
+
+**斐波那契数**，通常用 `F(n)` 表示，形成的序列称为 **斐波那契数列** 。该数列由 `0` 和 `1` 开始，后面的每一项数字都是前面两项数字的和。也就是：
+
+```
+F(0) = 0，F(1) = 1
+F(n) = F(n - 1) + F(n - 2)，其中 n > 1
+```
+
+给你 `n` ，请计算 `F(n)` 。
+
+ **示例 1：**
+
+```
+输入：2
+输出：1
+解释：F(2) = F(1) + F(0) = 1 + 0 = 1
+```
+
+**示例 2：**
+
+```
+输入：3
+输出：2
+解释：F(3) = F(2) + F(1) = 1 + 1 = 2
+```
+
+**示例 3：**
+
+```
+输入：4
+输出：3
+解释：F(4) = F(3) + F(2) = 2 + 1 = 3
+```
+
+ **提示：**
+
+- `0 <= n <= 30`
+
+**解题思路：**
+
+1. 我们需要输出$n$对应的斐波那契数值，所以我们的$dp$数组中$dp[i]$就表示第$i$个数的斐波那契数值
+
+2. 确定状态转移方程，题目中其实已经给出了：
+   $$
+   dp[i] = dp[i-1]+dp[i-2]
+   $$
+
+3. $dp$数组的初始化，这里题目中也已经给出了：
+   $$
+   \begin{cases}
+   dp[0]=0 \\
+   dp[1]=1
+   \end{cases}
+   $$
+
+4. 确定遍历顺序，根据状态转移方程可知，$dp[i]$是依赖$dp[i-1]$和$dp[i-2]$的，所以需要从左到右遍历
+
+```python
+class Solution:
+    def fib(self, n: int) -> int:
+        if n <=1:
+            return n
+        dp = [0]*(n+1)
+        dp[0] = 0
+        dp[1] = 1
+        for i in range(2, n+1):
+            dp[i] = dp[i-2] + dp[i-1]
+        return dp[-1]
+```
+
+```c++
+#include<iostream>
+using namespace std;
+class Solution {
+public:
+    int fib(int n) {
+        if(n<=1)    return n;
+        int dp[n+1];
+        dp[0] = 0;
+        dp[1] = 1;
+        for(int i=2; i<n+1; i++)
+        {
+            dp[i] = dp[i-1] + dp[i-2];
+        }
+        return dp[n];
+    }
+};
+```
+
+小结一下：
+
+- 时间复杂度：$O(N)$
+- 空间复杂度：$O(N)$
+
+参考资料：
+
+- [@程序员Carl：动态规划：斐波那契数](https://mp.weixin.qq.com/s?__biz=MzUxNjY5NTYxNA==&mid=2247486389&idx=1&sn=c04a762fa0d83aad2ef8738aa659523b&chksm=f9a238e4ced5b1f21aee21c521fc9151e23cecebb13bfac0698b726efd80296e8975b172c44a&scene=178&cur_album_id=1679142788606574595#rd)
+
+
+
+
+
+
+
