@@ -253,7 +253,7 @@ public:
 
 解释：这只青蛙本来的力气就是可以跳最多两个台阶的，它又想在吃最少屎的情况下跳到井口，那么只需要第一次跳两个台阶，跳上去之后了累了没劲了，但是吃光了了该台阶上的屎的时候，来劲了，再跳两个台阶就能找到其他蛙儿了
 
-**解题思路：**
+**解题思路：井底之蛙要吃屎**
 
 这道题肯定是使用动态规划进行求解，首先必须明确一点，由上图中可以看出，虽然只有三个台阶上有屎，但是实际上青蛙面前实际上有四个台阶！
 
@@ -324,3 +324,110 @@ public:
 - [@力扣官方题解：使用最小话费爬楼梯](https://leetcode-cn.com/problems/min-cost-climbing-stairs/solution/shi-yong-zui-xiao-hua-fei-pa-lou-ti-by-l-ncf8/)
 
 - [@程序员Carl：动态规划：使用最小花费爬楼梯](https://mp.weixin.qq.com/s?__biz=MzUxNjY5NTYxNA==&mid=2247486432&idx=1&sn=5f449828e7fbe769540742e91b3fe13c&chksm=f9a238b1ced5b1a7036fd1068f77b6d997a4446ab9fbe01ab2c96631407ddaa3b8a844bf68fd&scene=178&cur_album_id=1679142788606574595#rd)
+
+#### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
+
+一个机器人位于一个 `m x n` 网格的左上角 （起始点在下图中标记为 “Start” ）。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+
+问总共有多少条不同的路径？
+
+ **示例 1：**
+
+![img](pics/robot_maze.png)
+
+```
+输入：m = 3, n = 7
+输出：28
+```
+
+**示例 2：**
+
+```
+输入：m = 3, n = 2
+输出：3
+解释：
+从左上角开始，总共有 3 条路径可以到达右下角。
+1. 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右
+3. 向下 -> 向右 -> 向下
+```
+
+**示例 3：**
+
+```
+输入：m = 7, n = 3
+输出：28
+```
+
+**示例 4：**
+
+```
+输入：m = 3, n = 3
+输出：6
+```
+
+ **提示：**
+
+- `1 <= m, n <= 100`
+- 题目数据保证答案小于等于 `2 * 109`
+
+**解题思路：大家快来看啊，这只机器人不会走回头路**
+
+这道题能够拆分成具有相同任务的小问题，所以我们可以尝试使用**动态规划**来做
+
+- 首先**确定一下 $dp$ 数组及其下标表示的含义**，我们肯定是要新建维度和原矩阵一样的 $dp$ 数组，而 $dp[i][j]$ 就表示到达格子的 $[i][j]$ 这个位置有多少种不同的路径
+
+- 然后确定一下**状态转移方程**，我们可以发现，要想到达 $Finish$ 格子的位置，可以从 $Finish$ 上面的格子走 $\downarrow$ 来，或者由 $Finish$ 左边的格子向 $\rightarrow$ 走过来，所以路径由这两部分组成，即：
+  $$
+  dp[i][j]=dp[i-1][j]+dp[i][j-1]
+  $$
+
+- 那 **$dp$ 数组的初值**该怎么确定呢？由上一步的**状态转移方程**可以看到，如果我们不知道 $dp$ 数组的第 $1$ 行和第 $1$ 列，我们是无法计算出走到 $Finish$ 的路径条数的，所以我们必须确定 $dp$ 数组的第 $1$ 行和第 $1$ 列的值。又因为这只机器人比较傻（其实所有机器人都比较傻），**只会向右 $\rightarrow$ 和向 $\downarrow$ 走**，所以如果该网格如果只有 $1$ 行（或 $1$ 列）的话，这只机器人就只能傻傻向 $\rightarrow$ （或向 $\downarrow$ ）走了，这种情况的话，路径是只有 $1$ 种的，**所以** **$dp$ 数组的第 $1$ 行和第 $1$ 列的值都为 $1$** ，所以：
+  $$
+  \begin {cases}
+  dp[0][y]=1	& \text{机器人只会向 $\rightarrow$ ，所以和start在同一行的所有格子的路径只有1种}\\
+  dp[x][0]=1	& \text{机器人只会向 $\downarrow$ ，所以和start在同一列的所有格子的路径只有1种}
+  \end {cases}
+  $$
+
+- 这个时候我们可以考虑如何遍历 $dp$ 数组了，因为这是个网格，机器人只会向 $\rightarrow$ 或者向 $\downarrow$ 走的这两种选择，而网格即使转置了之后，机器人依然是只会 $\rightarrow$ 和 $\downarrow$ 的，所以**无论是按行遍历还是按列遍历，最终也都会遍历到 $Finish$ 格子**，且当遍历到 $Finish$ 格子的时候， $dp$ 数组的所有格子也都遍历到了，所以这两种遍历都是可以的
+
+```python
+# Python3
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        if m==1 or n==1:    return 1
+        dp = [[1]*n for _ in range(m)]
+        for x in range(1, m):
+            for y in range(1, n):
+                dp[x][y] = dp[x-1][y] + dp[x][y-1]
+        return dp[-1][-1]
+```
+
+```c++
+// C++
+#include <iostream>
+#include <vector>
+using namespace std;
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        if(m==1 || n==1)    return 1;
+        vector<vector<int>> dp(m, vector<int>(n, 1));
+        for(int x=1; x<m; x++){
+            for(int y=1; y<n; y++){
+                dp[x][y] = dp[x-1][y] + dp[x][y-1];
+            }
+        }
+        return dp.back().back();
+    }
+};
+```
+
+小结一下：
+
+- 时间复杂度：$O(mn)$ ，因为需要遍历 $m*n$ 维的 $dp$ 数组
+- 空间复杂度：$O(mn)$，需要 $m*n$ 维的 $dp$ 数组来存储到达每个位置的不同路径数
+- 当然这道题还有别的方法，这里主要讲动态规划，所以只给出了动态规划的解法
