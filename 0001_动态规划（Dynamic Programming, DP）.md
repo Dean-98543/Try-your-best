@@ -325,7 +325,7 @@ public:
 
 - [@程序员Carl：动态规划：使用最小花费爬楼梯](https://mp.weixin.qq.com/s?__biz=MzUxNjY5NTYxNA==&mid=2247486432&idx=1&sn=5f449828e7fbe769540742e91b3fe13c&chksm=f9a238b1ced5b1a7036fd1068f77b6d997a4446ab9fbe01ab2c96631407ddaa3b8a844bf68fd&scene=178&cur_album_id=1679142788606574595#rd)
 
-#### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
+#### [62. 不同路径I](https://leetcode-cn.com/problems/unique-paths/)
 
 一个机器人位于一个 `m x n` 网格的左上角 （起始点在下图中标记为 “Start” ）。
 
@@ -377,11 +377,11 @@ public:
 
 这道题能够拆分成具有相同任务的小问题，所以我们可以尝试使用**动态规划**来做
 
-- 首先**确定一下 $dp$ 数组及其下标表示的含义**，我们肯定是要新建维度和原矩阵一样的 $dp$ 数组，而 $dp[i][j]$ 就表示到达格子的 $[i][j]$ 这个位置有多少种不同的路径
+- 首先**确定一下 $dp$ 数组及其下标表示的含义**，我们肯定是要新建维度和原矩阵一样的 $dp$ 数组，而 $dp[x][y]$ 就表示到达格子的 $[x][y]$ 这个位置有多少种不同的路径
 
 - 然后确定一下**状态转移方程**，我们可以发现，要想到达 $Finish$ 格子的位置，可以从 $Finish$ 上面的格子走 $\downarrow$ 来，或者由 $Finish$ 左边的格子向 $\rightarrow$ 走过来，所以路径由这两部分组成，即：
   $$
-  dp[i][j]=dp[i-1][j]+dp[i][j-1]
+  dp[x][y]=dp[x-1][y]+dp[x][y-1]
   $$
 
 - 那 **$dp$ 数组的初值**该怎么确定呢？由上一步的**状态转移方程**可以看到，如果我们不知道 $dp$ 数组的第 $1$ 行和第 $1$ 列，我们是无法计算出走到 $Finish$ 的路径条数的，所以我们必须确定 $dp$ 数组的第 $1$ 行和第 $1$ 列的值。又因为这只机器人比较傻（其实所有机器人都比较傻），**只会向右 $\rightarrow$ 和向 $\downarrow$ 走**，所以如果该网格如果只有 $1$ 行（或 $1$ 列）的话，这只机器人就只能傻傻向 $\rightarrow$ （或向 $\downarrow$ ）走了，这种情况的话，路径是只有 $1$ 种的，**所以** **$dp$ 数组的第 $1$ 行和第 $1$ 列的值都为 $1$** ，所以：
@@ -431,3 +431,115 @@ public:
 - 时间复杂度：$O(mn)$ ，因为需要遍历 $m*n$ 维的 $dp$ 数组
 - 空间复杂度：$O(mn)$，需要 $m*n$ 维的 $dp$ 数组来存储到达每个位置的不同路径数
 - 当然这道题还有别的方法，这里主要讲动态规划，所以只给出了动态规划的解法
+
+#### [63. 不同路径 II](https://leetcode-cn.com/problems/unique-paths-ii/)
+
+一个机器人位于一个 *m x n* 网格的左上角 （起始点在下图中标记为“Start” ）。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+
+现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
+
+网格中的障碍物和空位置分别用 `1` 和 `0` 来表示。
+
+**示例 1：**
+
+```
+输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
+输出：2
+解释：
+3x3 网格的正中间有一个障碍物。
+从左上角到右下角一共有 2 条不同的路径：
+1. 向右 -> 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右 -> 向右
+```
+
+**示例 2：**
+
+```
+输入：obstacleGrid = [[0,1],[0,0]]
+输出：1
+```
+
+ **提示：**
+
+- `m == obstacleGrid.length`
+- `n == obstacleGrid[i].length`
+- `1 <= m, n <= 100`
+- `obstacleGrid[i][j]` 为 `0` 或 `1`
+
+**解题思路：不会走回头路的机器人，也会过障碍**
+
+这道题和这道题[62.不同路径I](https://leetcode-cn.com/problems/unique-paths/)基本思路是一样的，虽然有了障碍，但是只要我们明确 $dp$ 数组及其下标的含义，还有初始化 $dp$ 数组的真正原因，就会觉得即使有了障碍，这道题目也是很简单的
+
+1. 确定 $dp$ 数组及其下标的含义：我们用 $dp[x][y]$ 表示达到 $[x][y]$ 位置有多少条路径
+
+2. 确定状态转移方程，首先我们要明确，当 $[x][y]$ 位置上有障碍的时候，到达这个位置的路径条数为 $0$ ，从这个位置到它右边和下边的位置的路径条数也为 $0$ ，所以：
+   $$
+   \begin{cases}
+   dp[x][y]=0 &\text{这个位置有障碍}\\
+   dp[x][y]=dp[x-1][y]+dp[x][y-1]	&\text{这个位置没有障碍}
+   \end{cases}
+   $$
+
+3.  $dp$ 数组的初始化。上个题目中，我们讲到了，和机器人的初始位置在同一行和同一列的 $dp$ 数组需要初始化为 $1$ ，因为机器人的方向决定了只能有一条路径到达那里，而现在有了障碍物，又决定了能不能到达那里，所以障碍物之后的位置，机器人是到到达了那里的，所以应该初始化为 $0$ 
+
+4. 现在我们只需要按行，或者按列遍历数组都可以
+
+```python
+# Python3
+from typing import List
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        M, N = len(obstacleGrid), len(obstacleGrid[0])
+        dp = [[0]*N for _ in range(M)]  # 新建dp数组，用来保存到达某个位置的路径条数
+        for x in range(M):
+            if obstacleGrid[x][0]==1:
+                break   # 第一行如果有了障碍物，障碍物之后的位置机器人都到达不了，所以路径条数为0
+            dp[x][0] = 1
+        for y in range(N):
+            if obstacleGrid[0][y]==1:
+                break   # 第一列如果有了障碍物，障碍物下面的位置机器人都到达不了，所以路径条数为0
+            dp[0][y] = 1
+        for x in range(1, M):
+            for y in range(1, N):
+                if obstacleGrid[x][y] ==1:
+                    dp[x][y] = 0    # 如果某个位置遇到障碍物了，到达这个位置的路径条数就位0
+                else:
+                    dp[x][y] = dp[x-1][y]+dp[x][y-1]
+        return dp[-1][-1]
+```
+
+```c++
+# C++
+#include <iostream>
+#include <vector>
+using namespace std;
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int M=obstacleGrid.size(), N=obstacleGrid[0].size();
+        vector<vector<int>> dp(M, vector<int>(N, 0));   //新建dp数组，用来保存到达某个位置的路径条数
+        for(int x=0; x<M; x++){
+            if(obstacleGrid[x][0]==1)   break;  //第一行如果有了障碍物，障碍物之后的位置机器人都到达不了，所以路径条数为0
+            dp[x][0] = 1;   
+        }
+        for(int y=0; y<N; y++){
+            if(obstacleGrid[0][y]==1)   break;  //第一列如果有了障碍物，障碍物下面的位置机器人都到达不了，所以路径条数为0
+            dp[0][y] = 1;
+        }
+        for(int x=1; x<M; x++){
+            for(int y=1; y<N; y++){
+                if(obstacleGrid[x][y]==1)   dp[x][y]=0; //如果某个位置遇到障碍物了，到达这个位置的路径条数就位0
+                else    dp[x][y] = dp[x-1][y]+dp[x][y-1];
+            }
+        }
+        return dp.back().back();
+    }
+};
+```
+
+小结一下：
+
+- 时间复杂度：$O(mn)$ ，因为需要遍历 $m*n$ 维的 $dp$ 数组
+- 空间复杂度：$O(mn)$，需要 $m*n$ 维的 $dp$ 数组来存储到达每个位置的不同路径数
