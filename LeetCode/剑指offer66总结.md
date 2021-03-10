@@ -581,6 +581,422 @@ public:
 };
 ```
 
+#### 11. 旋转数组的最小数字
+
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的一个旋转，输出旋转数组的最小元素。例如，数组 `[3,4,5,1,2]` 为 `[1,2,3,4,5]` 的一个旋转，该数组的最小值为1。 
+
+**示例 1：**
+
+```
+输入：[3,4,5,1,2]
+输出：1
+```
+
+**示例 2：**
+
+```
+输入：[2,2,2,0,1]
+输出：0
+```
+
+##### 解法一：二分查找
+
+```python
+# Python3
+from typing import List
+class Solution:
+    def minArray(self, numbers: List[int]) -> int:
+        N = len(numbers)
+        l, r = 0, N-1
+        while l<r:
+            mid = l+(r-l)//2
+            if numbers[mid] < numbers[r]:
+                r = mid
+            elif numbers[mid] > numbers[r]:
+                l = mid+1
+            else:
+                r-=1
+        return numbers[l]
+```
+
+```c++
+// C++
+#include <iostream>
+#include <vector>
+using namespace std;
+class Solution {
+public:
+    int minArray(vector<int>& numbers) {
+        int N = numbers.size();
+        int l=0, r=N-1;
+        while(l<r){
+            int mid = l + (r-l)/2;
+            if(numbers[mid]<numbers[r])
+                r = mid;
+            else if(numbers[mid]>numbers[r])
+                l = mid+1;
+            else
+                r-=1;
+        }
+        return numbers[l];
+    }
+};
+```
+
+#### 14. I剪绳子
+
+给你一根长度为 `n` 的绳子，请把绳子剪成整数长度的 `m` 段（m、n都是整数，n>1并且m>1），每段绳子的长度记为 `k[0],k[1]...k[m-1]` 。请问 `k[0]*k[1]*...*k[m-1]` 可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+
+**示例 1：**
+
+```
+输入: 2
+输出: 1
+解释: 2 = 1 + 1, 1 × 1 = 1
+```
+
+**示例 2:**
+
+```
+输入: 10
+输出: 36
+解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36
+```
+
+**提示：**
+
+- `2 <= n <= 58`
+
+##### 解法一：动态规划
+
+```python
+# Python3
+class Solution:
+    def cuttingRope(self, n: int) -> int:
+
+        if n==2:    return 1
+        if n==3:    return 2
+        dp = [1]*(n+1)
+        dp[0] = 1
+        dp[1] = 1
+        dp[2] = 2
+        dp[3] = 3       # 注意dp[3] != dp[1]*dp[2]，所以dp[3]必须指定初始值
+        # 事实上，尽可能将绳子以长度3等分为多段时，乘积最大
+
+        for i in range(4, n+1):
+            for j in range(1, i//2+1):
+                print(i, j, i-j)
+                dp[i] = max(dp[j]*dp[i-j], dp[i])
+        return dp[n]
+```
+
+```c++
+//C++
+#include<iostream>
+#include<vector>
+using namespace std;
+class Solution{
+public:
+    int cuttingRope(int n){
+        if(n==2)    return 1;
+        if(n==3)    return 2;
+        vector<int> dp(n+1, 1);
+        dp[0] = 1;
+        dp[1] = 1;
+        dp[2] = 2;
+        dp[3] = 3;  // 注意dp[3] != dp[1]*dp[2]，所以dp[3]必须指定初始值
+        // 事实上，尽可能将绳子以长度3等分为多段时，乘积最大
+        
+        for(int i=4; i<n+1; i++){
+            for(int j=1; j<i/2+1; j++){
+                dp[i] = max(dp[j]*dp[i-j], dp[i]);
+            }
+        }
+        return dp[n];
+    }
+};
+```
+
+#### 14. II剪绳子
+
+给你一根长度为 `n` 的绳子，请把绳子剪成整数长度的 `m` 段（m、n都是整数，n>1并且m>1），每段绳子的长度记为 `k[0],k[1]...k[m - 1]` 。请问 `k[0]*k[1]*...*k[m - 1]` 可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+
+答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+
+ **示例 1：**
+
+```
+输入: 2
+输出: 1
+解释: 2 = 1 + 1, 1 × 1 = 1
+```
+
+**示例 2:**
+
+```
+输入: 10
+输出: 36
+解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36
+```
+
+ **提示：**
+
+- `2 <= n <= 1000`
+
+##### 解法二：贪心
+
+```python
+# Python3
+class Solution:
+    def cuttingRope(self, n: int) -> int:
+        if n==2:    return 1
+        if n==3:    return 2
+        res = 1
+        while(n>4):
+            res*=3
+            res%=1000000007
+            n-=3
+        return (res*n)%1000000007
+```
+
+```c++
+// C++
+#include<iostream>
+using namespace std;
+class Solution{
+public:
+    int cuttingRope(int n){
+        if(n==2)    return 1;
+        if(n==3)    return 2;
+        long long res=1;
+        while(n>4){
+            res*=3;
+            res%=1000000007;
+            n-=3;
+        }
+        return (res*n)%1000000007;
+    }
+};
+```
+
+#### 15. 二进制中1的个数
+
+请实现一个函数，输入一个整数（以二进制串形式），输出该数二进制表示中 1 的个数。例如，把 9 表示成二进制是 1001，有 2 位是 1。因此，如果输入 9，则该函数输出 2。
+
+ **示例 1：**
+
+```
+输入：00000000000000000000000000001011
+输出：3
+解释：输入的二进制串 00000000000000000000000000001011 中，共有三位为 '1'。
+```
+
+**示例 2：**
+
+```
+输入：00000000000000000000000010000000
+输出：1
+解释：输入的二进制串 00000000000000000000000010000000 中，共有一位为 '1'。
+```
+
+**示例 3：**
+
+```
+输入：11111111111111111111111111111101
+输出：31
+解释：输入的二进制串 11111111111111111111111111111101 中，共有 31 位为 '1'。
+```
+
+ **提示：**
+
+- 输入必须是长度为 `32` 的 **二进制串** 。
+
+##### 解法一：逐位判断
+
+```python
+# Python
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+        res = 0
+        while n:
+            res+= n&1
+            n>>=1
+        return res
+```
+
+```c++
+// C++
+#include<iostream>
+using namespace std;
+class Solution{
+public:
+    int hammingWeight(uint32_t n){
+        int res = 0;
+        while(n){
+            res+= n&1;
+            n>>=1;
+        }
+        return res;
+    }
+};
+```
+
+#### 16. 数值的整数次方
+
+实现 [pow(*x*, *n*)](https://www.cplusplus.com/reference/valarray/pow/) ，即计算 x 的 n 次幂函数（即，$x^n$）。不得使用库函数，同时不需要考虑大数问题。
+
+ **示例 1：**
+
+```
+输入：x = 2.00000, n = 10
+输出：1024.00000
+```
+
+**示例 2：**
+
+```
+输入：x = 2.10000, n = 3
+输出：9.26100
+```
+
+**示例 3：**
+
+```
+输入：x = 2.00000, n = -2
+输出：0.25000
+解释：2-2 = 1/22 = 1/4 = 0.25
+```
+
+ **提示：**
+
+- `-100.0 < x < 100.0`
+- `-231 <= n <= 231-1`
+- `-104 <= xn <= 104`
+
+##### 解法一：快速幂（循环解法）
+
+```python
+# Python3
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        if x==0:    return 0
+        if n<0:
+            x, n = 1/x, -n
+        res = 1
+        while n:
+            if n&1:
+                res*=x
+            x*=x
+            n>>=1
+        return res
+```
+
+```c++
+// C++
+#include<iostream>
+using namespace std;
+class Solution{
+public:
+    double myPow(double x, int n){
+        if(x==0)    return 0;
+        double res = 1;
+        long num = n;
+        if(num<0){
+            x = 1/x;
+            num = -num;
+        }
+        while(num>0){   // C++里面，建议用num>0作为判断条件
+            if(num&1) res*=x;
+            x*=x;
+            num>>=1;
+        }
+        return res;
+    }
+};
+```
+
+##### 解法二：快速幂（递归解法）
+
+```python
+# Python3
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        if x==0:    return 0
+        if n<0:
+            x, n = 1/x, -n
+        if n==0:
+            return 1    # 递归的停止条件
+        if n&1:
+            return self.myPow(x*x, n>>1) * x
+        else:
+            return self.myPow(x*x, n>>1)
+```
+
+```c++
+// C++
+#include<iostream>
+using namespace std;
+class Solution{
+public:
+    double myPow(double x, int n){
+        if(x==0)    return 0;
+        long num = n;
+        if(num<0){
+            x = 1/x;
+            num = -num;
+        }
+        if(num==0)      // 递归的终止条件
+            return 1;
+        if(num&1==1)    
+            return myPow(x*x, num>>1) * x;
+        else
+            return myPow(x*x, num>>1);
+    }
+};
+```
+
+#### 17. 打印从1到最大的n位数
+
+输入数字 `n`，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。
+
+**示例 1:**
+
+```
+输入: n = 1
+输出: [1,2,3,4,5,6,7,8,9]
+```
+
+ 说明：
+
+- 用返回一个整数列表来代替打印
+- n 为正整数
+
+##### 解法一：简单解法（不考虑大数问题）
+
+```python
+# Python3
+class Solution:
+    def printNumbers(self, n: int):
+        return list(range(1, 10**n))
+```
+
+```c++
+// C++
+#include<iostream>
+#include<vector>
+#include<math.h>
+using namespace std;
+class Solution {
+public:
+    vector<int> printNumbers(int n) {
+        vector<int> res;
+        for(int i=1; i<pow(10, n); i++)
+            res.push_back(i);
+        return res;
+    }
+};
+```
+
 #### 18. 删除链表的节点（简单）
 
 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
@@ -610,9 +1026,10 @@ public:
 - 题目保证链表中节点的值互不相同
 - 若使用 C 或 C++ 语言，你不需要 `free` 或 `delete` 被删除的节点
 
-##### 解法一：单指针遍历
+##### 解法一：单指针
 
 ```python
+# Python3
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -620,21 +1037,47 @@ public:
 #         self.next = None
 class Solution:
     def deleteNode(self, head: ListNode, val: int) -> ListNode:
-        if head.val==val:
-            return head.next
-        else:
-            p = head
-            while p.next:
-                if p.next.val == val:
-                    p.next = p.next.next
-                    return head
-                else:
-                    p = p.next
+        if head.val==val:   return head.next    # 如果头节点是要删除的节点
+        root = head
+        while head.next:
+            if head.next.val==val:  # 找到待删除节点，将待删除节点的前驱节点的next指针指向待删除节点的next指针指向的节点（注意，当待删除节点是该链表最后一个节点的时候，该操作后待删除节点的前驱节点的next指针指向为None，则不能进行head = head.next操作，故需要break）
+                head.next = head.next.next
+                break     # 必须要有break，以应对删除的节点是最后一个节点的情况
+            head = head.next
+        return root     # 返回头结点指针
 ```
 
-##### 解法二：双指针遍历
+```c++
+// C++
+#include<iostream>
+using namespace std;
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+// 单指针
+class Solution {
+public:
+    ListNode* deleteNode(ListNode* head, int val) {
+        if(head->val == val)    return head->next;
+        ListNode *root = head;
+        while(head->next){
+            if(head->next->val == val){
+                head->next = head->next->next;
+                break;
+            }
+            head = head->next;
+        }
+        return root;
+    }
+};
+```
+
+##### 解法二：双指针
 
 ```python
+# Python3
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -642,15 +1085,40 @@ class Solution:
 #         self.next = None
 class Solution:
     def deleteNode(self, head: ListNode, val: int) -> ListNode:
-        if head.val==val:
-            return head.next
-        else:
-            pre, cur = head, head.next
-            while cur and cur.val!=val:
-                pre, cur = cur, cur.next
-            if cur.val==val:
+        if head.val==val:   return head.next    # 如果头节点是要删除的节点
+        root = head
+        pre, cur = head, head.next  # 定义两个指针，一个指向前驱节点，一个指向当前节点
+        while cur:
+            if cur.val==val:    # 当找到要删除的节点的时候，将前驱节点的next指针指向当前节点的下个节点
                 pre.next = cur.next
-            return head
+                break   # 可以不用这个break
+            pre, cur = cur, cur.next
+        return root     # 返回头结点指针
+```
+
+```c++
+// C++
+#include<iostream>
+using namespace std;
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+class Solution {
+public:
+    ListNode* deleteNode(ListNode* head, int val) {
+        if(head->val == val)    return head->next;
+        ListNode *root = head, *pre = head, *cur = head->next;
+        while(cur){
+            if(cur->val == val) 
+                pre->next = cur->next;
+            pre = cur;
+            cur = cur->next;
+        }
+        return root;
+    }
+};
 ```
 
 #### 22. 链表中倒数第k各节点（简单）
