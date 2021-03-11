@@ -239,8 +239,6 @@ public:
 };
 ```
 
-
-
 ##### 解法二：辅助栈/顺序/迭代
 
 ```python
@@ -290,7 +288,7 @@ public:
 };
 ```
 
-#### 07. 重建二叉树
+#### 07. 重建二叉树（TBC）
 
 输入某二叉树的前序遍历和中序遍历的结果，请重建该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
 
@@ -317,7 +315,7 @@ public:
 0 <= 节点个数 <= 5000
 ```
 
-##### 解法一：递归
+##### 解法一：递归（TBC）
 
 ```python
 # Definition for a binary tree node.
@@ -643,6 +641,58 @@ public:
 };
 ```
 
+#### 12. 矩阵中的路径（TBC）
+
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。例如，在下面的3×4的矩阵中包含一条字符串“bfce”的路径（路径中的字母用加粗标出）。
+
+[["a","**b**","c","e"],
+["s","**f**","**c**","s"],
+["a","d","**e**","e"]]
+
+但矩阵中不包含字符串“abfb”的路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入这个格子。
+
+ **示例 1：**
+
+```
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+输出：true
+```
+
+**示例 2：**
+
+```
+输入：board = [["a","b"],["c","d"]], word = "abcd"
+输出：false
+```
+
+ **提示：**
+
+- `1 <= board.length <= 200`
+- `1 <= board[i].length <= 200`
+
+#### 13. 机器人的运动范围（TBC）
+
+地上有一个m行n列的方格，从坐标 `[0,0]` 到坐标 `[m-1,n-1]` 。一个机器人从坐标 `[0, 0] `的格子开始移动，它每次可以向左、右、上、下移动一格（不能移动到方格外），也不能进入行坐标和列坐标的数位之和大于k的格子。例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。但它不能进入方格 [35, 38]，因为3+5+3+8=19。请问该机器人能够到达多少个格子？
+
+ **示例 1：**
+
+```
+输入：m = 2, n = 3, k = 1
+输出：3
+```
+
+**示例 2：**
+
+```
+输入：m = 3, n = 1, k = 0
+输出：1
+```
+
+**提示：**
+
+- `1 <= n,m <= 100`
+- `0 <= k <= 20`
+
 #### 14. I剪绳子
 
 给你一根长度为 `n` 的绳子，请把绳子剪成整数长度的 `m` 段（m、n都是整数，n>1并且m>1），每段绳子的长度记为 `k[0],k[1]...k[m-1]` 。请问 `k[0]*k[1]*...*k[m-1]` 可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
@@ -841,6 +891,8 @@ public:
 };
 ```
 
+##### 解法二：n&(n-1)（TBC）
+
 #### 16. 数值的整数次方
 
 实现 [pow(*x*, *n*)](https://www.cplusplus.com/reference/valarray/pow/) ，即计算 x 的 n 次幂函数（即，$x^n$）。不得使用库函数，同时不需要考虑大数问题。
@@ -997,6 +1049,8 @@ public:
 };
 ```
 
+##### 解法二：考虑大数问题（TBC）
+
 #### 18. 删除链表的节点（简单）
 
 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
@@ -1121,6 +1175,130 @@ public:
 };
 ```
 
+#### 19. 正则表达式匹配（TBC）
+
+请实现一个函数用来匹配包含`'. '`和`'*'`的正则表达式。模式中的字符`'.'`表示任意一个字符，而`'*'`表示它前面的字符可以出现任意次（含0次）。在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串`"aaa"`与模式`"a.a"`和`"ab*ac*a"`匹配，但与`"aa.a"`和`"ab*a"`均不匹配。
+
+**示例 1:**
+
+```
+输入:
+s = "aa"
+p = "a"
+输出: false
+解释: "a" 无法匹配 "aa" 整个字符串。
+```
+
+**示例 2:**
+
+```
+输入:
+s = "aa"
+p = "a*"
+输出: true
+解释: 因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 "aa" 可被视为 'a' 重复了一次。
+```
+
+**示例 3:**
+
+```
+输入:
+s = "ab"
+p = ".*"
+输出: true
+解释: ".*" 表示可匹配零个或多个（'*'）任意字符（'.'）。
+```
+
+**示例 4:**
+
+```
+输入:
+s = "aab"
+p = "c*a*b"
+输出: true
+解释: 因为 '*' 表示零个或多个，这里 'c' 为 0 个, 'a' 被重复一次。因此可以匹配字符串 "aab"。
+```
+
+**示例 5:**
+
+```
+输入:
+s = "mississippi"
+p = "mis*is*p*."
+输出: false
+```
+
+- `s` 可能为空，且只包含从 `a-z` 的小写字母。
+- `p` 可能为空，且只包含从 `a-z` 的小写字母以及字符 `.` 和 `*`，无连续的 `'*'`。
+
+#### 20. 表示数值的字符串（TBC）
+
+请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100"、"5e2"、"-123"、"3.1416"、"-1E-16"、"0123"都表示数值，但"12e"、"1a3.14"、"1.2.3"、"+-5"及"12e+5.4"都不是。
+
+#### 21. 调整数组顺序使奇数位于偶数前面
+
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分。
+
+ **示例：**
+
+```
+输入：nums = [1,2,3,4]
+输出：[1,3,2,4] 
+注：[3,1,2,4] 也是正确的答案之一。
+```
+
+ **提示：**
+
+1. `0 <= nums.length <= 50000`
+2. `1 <= nums[i] <= 10000`
+
+##### 解法一：首尾双指针
+
+```python
+# Python3
+class Solution:
+    def exchange(self, nums):
+        N = len(nums)
+        if N<=1:    return nums # 空列表或者列表只有一个元素
+        l, r = 0, N-1
+        while l<r:
+            while l<r:
+                if nums[l]&1==0:    break    # 找到左边的偶数
+                l+=1
+            while l<r:
+                if nums[r]&1==1:    break   # 找到右边的奇数
+                r-=1
+            nums[l], nums[r] = nums[r], nums[l]
+        return nums
+```
+
+```C++
+// C++
+#include<iostream>
+#include<vector>
+using namespace std;
+class Solution {
+public:
+    vector<int> exchange(vector<int>& nums) {
+        int N = nums.size();
+        if(N<=1)    return nums;    // 空列表或者列表只有一个元素
+        int l=0, r=N-1;
+        while(l<r){
+            while(l<r){
+                if((nums[l]&1)==0) break; // 找到左边的偶数
+                l+=1;
+            }
+            while(l<r){
+                if((nums[r]&1)==1) break; // 找到右边的奇数
+                r-=1;
+            }
+            swap(nums[r], nums[l]);
+        }
+        return nums;
+    }
+};
+```
+
 #### 22. 链表中倒数第k各节点（简单）
 
 输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。例如，一个链表有6个节点，从头节点开始，它们的值依次是1、2、3、4、5、6。这个链表的倒数第3个节点是值为4的节点。
@@ -1133,25 +1311,47 @@ public:
 返回链表 4->5.
 ```
 
-##### 解法一：双指针
+##### 解法一：快慢双指针（固定间隔）
 
 ```python
+# Python3
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
 #         self.val = x
 #         self.next = None
-
 class Solution:
     def getKthFromEnd(self, head: ListNode, k: int) -> ListNode:
-        if not head:
-            return None
         left = right = head
         for _ in range(k):
             right = right.next
         while right:
             left, right = left.next, right.next
         return left
+```
+
+```c++
+// C++
+#include<iostream>
+using namespace std;
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+class Solution {
+public:
+    ListNode* getKthFromEnd(ListNode* head, int k) {
+        ListNode *left=head, *right=head;
+        for(int i=0; i<k; i++)
+            right = right->next;
+        while(right){
+            left = left->next;
+            right = right->next;
+        }
+        return left;
+    }
+};
 ```
 
 #### 24. 反转链表（简单）
@@ -1171,31 +1371,54 @@ class Solution:
 0 <= 节点个数 <= 5000
 ```
 
-##### 解法一：迭代
+##### 解法一：双指针（迭代）
 
 ```python
+# Python3
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
 #         self.val = x
 #         self.next = None
-
 class Solution:
     def reverseList(self, head: ListNode) -> ListNode:
-        if not head:
-            return None
-        elif not head.next:
+        if not head or not head.next:
             return head
-        else:
-            pre, cur = None, head
-            while cur:
-                temp = cur.next
-                cur.next = pre
-                pre, cur = cur, temp
-            return pre
+        pre, cur = None, head
+        while cur:
+            temp = cur.next         # 暂存后继节点，便于向右遍历
+            cur.next = pre          # 修改当前节点的next指针指向，即将当前节点的next指针指向其前驱节点，完成反向操作
+            pre, cur = cur, temp    # 向后遍历
+        return pre
 ```
 
-##### 解法二：递归
+```c++
+// C++
+#include<iostream>
+using namespace std;
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head==nullptr || head->next==nullptr)
+            return head;
+        ListNode *pre=nullptr, *cur=head;
+        while(cur){
+            ListNode *temp = cur->next; // 暂存后继节点，便于向后遍历
+            cur->next = pre;            // 修改当前节点的next指针指向，即将当前节点的next指针指向其前驱节点，完成反向操作
+            pre = cur;                  // 向后遍历
+            cur = temp;
+        }
+        return pre;
+    }
+};
+```
+
+##### 解法二：递归（TBC）
 
 ```python
 # Definition for singly-linked list.
@@ -1236,30 +1459,57 @@ class Solution:
 ##### 解法一：迭代
 
 ```python
+# Python3
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
 #         self.val = x
 #         self.next = None
-
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        if not l1:
-            return l2
-        elif not l2:
-            return l1
-        else:
-            prehead = head = ListNode(0)
-            while l1 and l2:
-                if l1.val < l2.val:
-                    head.next = l1
-                    l1 = l1.next
-                else:
-                    head.next = l2
-                    l2 = l2.next
-                head = head.next
-            head.next = l1 if l1 else l2
-            return prehead.next
+        dummy = ListNode(0)
+        head = dummy
+        while l1 and l2:
+            if l1.val < l2.val:
+                head.next = l1
+                l1 = l1.next
+            else:
+                head.next = l2
+                l2 = l2.next
+            head = head.next
+        head.next = l1 if l1 else l2
+        return dummy.next
+```
+
+```c++
+// C++
+#include<iostream>
+using namespace std;
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode *dummy = new ListNode(0);
+        ListNode *head = dummy;
+        while(l1 && l2){
+            if(l1->val < l2->val){
+                head->next = l1;
+                l1 = l1->next;
+            }
+            else{
+                head->next = l2;
+                l2 = l2->next;
+            }
+            head = head->next;
+        }
+        head->next = l1?l1:l2;
+        return dummy->next;
+    }
+};
 ```
 
 ##### 解法二：递归
