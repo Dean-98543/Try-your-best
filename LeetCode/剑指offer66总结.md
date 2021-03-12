@@ -1515,12 +1515,12 @@ public:
 ##### 解法二：递归
 
 ```python  
+# Python3
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
 #         self.val = x
 #         self.next = None
-
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
         if not l1:
@@ -1534,6 +1534,283 @@ class Solution:
             l2.next = self.mergeTwoLists(l1, l2.next)
             return l2
 ```
+
+```c++
+// C++
+#include<iostream>
+using namespace std;
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(l1==nullptr)
+            return l2;
+        else if(l2==nullptr)
+            return l1;
+        else{
+            if(l1->val < l2->val){
+                l1->next = mergeTwoLists(l1->next, l2);
+                return l1;
+            }
+            else{
+                l2->next = mergeTwoLists(l1, l2->next);
+                return l2;
+            }
+        }
+    }
+};
+```
+
+#### 26. 树的子结构（TBC）
+
+输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
+
+B是A的子结构， 即 A中有出现和B相同的结构和节点值。
+
+例如:
+给定的树 A:
+
+`   3  / \  4  5 / \ 1  2`
+给定的树 B：
+
+`  4  / 1`
+返回 true，因为 B 与 A 的一个子树拥有相同的结构和节点值。
+
+**示例 1：**
+
+```
+输入：A = [1,2,3], B = [3,1]
+输出：false
+```
+
+**示例 2：**
+
+```
+输入：A = [3,4,5,1,2], B = [4,1]
+输出：true
+```
+
+**限制：**
+
+```
+0 <= 节点个数 <= 10000
+```
+
+#### 27. 二叉树的镜像（TBC）
+
+请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+
+例如输入：
+
+ 	4  
+
+​    /  \ 
+
+   2   7 
+
+  / \  / \
+
+1  3 6  9
+镜像输出：
+
+```
+    4 
+  /  \ 
+ 7   2 
+/ \  / \
+9  6 3  1
+```
+
+ **示例 1：**
+
+```
+输入：root = [4,2,7,1,3,6,9]
+输出：[4,7,2,9,6,3,1]
+```
+
+ **限制：**
+
+```
+0 <= 节点个数 <= 1000
+```
+
+#### 28. 对称的二叉树（TBC）
+
+请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+
+例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+
+​	1  
+
+​    / \ 
+
+   2  2 
+
+  / \ / \
+
+3  4 4  3
+但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+
+```
+  1  
+ / \ 
+ 2  2 
+  \  \ 
+   3  3
+```
+
+ **示例 1：**
+
+```
+输入：root = [1,2,2,3,4,4,3]
+输出：true
+```
+
+**示例 2：**
+
+```
+输入：root = [1,2,2,null,3,null,3]
+输出：false
+```
+
+ **限制：**
+
+```
+0 <= 节点个数 <= 1000
+```
+
+#### 29. 顺时针打印矩阵
+
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+
+**示例 1：**
+
+```
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,3,6,9,8,7,4,5]
+```
+
+**示例 2：**
+
+```
+输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+```
+
+ **限制：**
+
+- `0 <= matrix.length <= 100`
+- `0 <= matrix[i].length <= 100`
+
+##### 解法一：按层模拟
+
+```python
+# Python3
+class Solution:
+    def spiralOrder(self, matrix):
+        res = []
+        rows, cols = (len(matrix) if matrix else 0), (len(matrix[0]) if matrix else 0)
+        if rows==0 or cols==0:
+            return res
+        left, right, top, bottom = 0, cols-1, 0, rows-1
+        while left<=right and top<=bottom:
+            for col in range(left, right+1):
+                res.append(matrix[top][col])
+            for row in range(top+1, bottom+1):
+                res.append(matrix[row][right])
+
+            if left<right and top<bottom:
+                for col in range(right-1, left, -1):
+                    res.append(matrix[bottom][col])
+                for row in range(bottom, top, -1):
+                    res.append(matrix[row][left])
+            left, right, top, bottom = left+1, right-1, top+1, bottom-1
+        return res
+```
+
+```c++
+// C++
+#include<iostream>
+#include<vector>
+using namespace std;
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int rows=matrix.empty()?0:matrix.size(), cols=matrix.empty()?0:matrix[0].size();
+        vector<int> res;
+        if(rows==0 || cols==0)  
+            return res;
+        int left=0, right=cols-1, top=0, bottom=rows-1;
+        while((left<=right) && (top<=bottom)){
+            for(int col=left; col<right+1; col++)
+                res.push_back(matrix[top][col]);
+            for(int row=top+1; row<bottom+1; row++)
+                res.push_back(matrix[row][right]);
+            if((left<right) && (top<bottom)){
+                for(int col=right-1; col>left; col--)
+                    res.push_back(matrix[bottom][col]);
+                for(int row=bottom; row>top; row--)
+                    res.push_back(matrix[row][left]);
+            }
+            left++; right--; top++; bottom--;
+        }
+        return res;
+    }
+};
+```
+
+#### 30. 包含min函数的栈（TBC）
+
+定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的 min 函数在该栈中，调用 min、push 及 pop 的时间复杂度都是 O(1)。
+
+**示例:**
+
+```
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.min();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.min();   --> 返回 -2.
+```
+
+**提示：**
+
+1. 各函数的调用总次数不超过 20000 次
+
+#### 31. 栈的压入、弹出序列（TBC）
+
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
+
+**示例 1：**
+
+```
+输入：pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+输出：true
+解释：我们可以按以下顺序执行：
+push(1), push(2), push(3), push(4), pop() -> 4,
+push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
+```
+
+**示例 2：**
+
+```
+输入：pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+输出：false
+解释：1 不能在 2 之前弹出。
+```
+
+ **提示：**
+
+1. `0 <= pushed.length == popped.length <= 1000`
+2. `0 <= pushed[i], popped[i] < 1000`
+3. `pushed` 是 `popped` 的排列。
 
 #### 32-I. 从上到下打印二叉树（中等）：直接打印出所有节点
 
