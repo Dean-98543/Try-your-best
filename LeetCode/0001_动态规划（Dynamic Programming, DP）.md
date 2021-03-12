@@ -549,3 +549,74 @@ ____
 这是我第**26**篇题解，也是[@Dean](https://leetcode-cn.com/u/dean-98543/)连续刷题打卡的第**39**天，希望能找到可以一起刷题一起进步的小伙伴~
 
 **刷题小白，编程语言也不熟悉，如有错误的地方，还请各位大佬多多指教~**
+
+#### [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+
+给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+
+**说明：**每次只能向下或者向右移动一步。
+
+ **示例 1：**
+
+```
+输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
+输出：7
+解释：因为路径 1→3→1→1→1 的总和最小。
+```
+
+**示例 2：**
+
+```
+输入：grid = [[1,2,3],[4,5,6]]
+输出：12
+```
+
+ **提示：**
+
+- `m == grid.length`
+- `n == grid[i].length`
+- `1 <= m, n <= 200`
+- `0 <= grid[i][j] <= 100`
+
+```python
+# Python3
+from typing import List
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        dp = [[0]*(n) for _ in range(m)]
+        dp[0][0] = grid[0][0]
+        for x in range(1, m):
+            dp[x][0] = dp[x-1][0]+grid[x][0]
+        for y in range(1, n):
+            dp[0][y] = dp[0][y-1]+grid[0][y]
+        for x in range(1, m):
+            for y in range(1, n):
+                dp[x][y] = min(dp[x-1][y], dp[x][y-1]) + grid[x][y]
+        return dp[m-1][n-1]
+```
+
+```c++
+#include<iostream>
+#include<vector>
+using namespace std;
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int m=grid.size(), n=grid[0].size();
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        dp[0][0] = grid[0][0];
+        for(int x=1; x<m; x++)  
+            dp[x][0] = dp[x-1][0] + grid[x][0];
+        for(int y=1; y<n; y++)
+            dp[0][y] = dp[0][y-1] + grid[0][y];
+        for(int x=1; x<m; x++){
+            for(int y=1; y<n; y++){
+                dp[x][y] = min(dp[x-1][y], dp[x][y-1]) + grid[x][y];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+};
+```
+
