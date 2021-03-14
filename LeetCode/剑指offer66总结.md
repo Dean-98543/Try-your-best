@@ -1840,29 +1840,68 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
 ##### 解法一：层次遍历
 
 ```python
+# Python3
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, x):
 #         self.val = x
 #         self.left = None
 #         self.right = None
-
+from typing import List
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[int]:
+        valArray = []
         if not root:
-            return []
-        res = []
-        from collections import deque	# 使用双端队列
-        queue = deque()
-        queue.append(root)
+            return valArray
+
+        from collections import deque
+        queue = deque([root])
         while queue:
             for _ in range(len(queue)):
-                node =  queue.popleft()
-                res.append(node.val)
-                if node.left:   queue.append(node.left)
-                if node.right:  queue.append(node.right)
-        return res
+                curNode = queue.popleft()
+                valArray.append(curNode.val)
+
+                if curNode.left:    queue.append(curNode.left)
+                if curNode.right:   queue.append(curNode.right)
+
+        return valArray
 ```
+
+```c++
+// C++
+#include<iostream>
+#include<vector>
+#include<deque>
+using namespace std;
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+class Solution {
+public:
+    vector<int> levelOrder(TreeNode* root) {
+        vector<int> valArray;
+        if(root==nullptr)   return valArray;
+        deque<TreeNode*> queue={root};
+        while(!queue.empty()){
+            int length = queue.size();
+            for(int i=0; i<length; i++){
+                TreeNode *curNode = queue.front();
+                queue.pop_front();
+                valArray.push_back(curNode->val);
+
+                if(curNode->left)   queue.push_back(curNode->left);
+                if(curNode->right)  queue.push_back(curNode->right);
+            }
+        }
+        return valArray;
+    }
+};
+```
+
+
 
 #### 32-II. 从上到下打印二叉树（简单）：按层顺序打印节点
 
@@ -1896,29 +1935,71 @@ class Solution:
 ##### 解法一：层次遍历
 
 ```python
+# Python3
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, x):
 #         self.val = x
 #         self.left = None
 #         self.right = None
-
+from typing import List
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        valArray = []
         if not root:
-            return []
-        res = []
-        from collections import deque	# 使用双端队列
-        queue = deque([root])
-        while queue:
-            temp = []
-            for _ in range(len(queue)):
-                node =  queue.popleft()
-                temp.append(node.val)
-                if node.left:   queue.append(node.left)
-                if node.right:  queue.append(node.right)
-            res.append(temp)
-        return res
+            return valArray
+
+        from collections import deque
+        queue = deque()
+        queue.append(root)
+        while(queue):
+            length = len(queue)
+            valLayer = []
+            for _ in range(length):
+                curNode = queue.popleft()
+                valLayer.append(curNode.val)
+
+                if curNode.left:    queue.append(curNode.left)
+                if curNode.right:   queue.append(curNode.right)
+            valArray.append(valLayer)
+
+        return valArray
+```
+
+```c++
+// C++
+#include<iostream>
+#include<vector>
+#include<deque>
+using namespace std;
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> valArray;
+        if(root==nullptr)   return valArray;
+        deque<TreeNode*> queue={root};
+        while(!queue.empty()){
+            int length = queue.size();
+            vector<int> valLayer;
+            for(int i=0; i<length; i++){
+                TreeNode *curNode = queue.front();
+                queue.pop_front();
+                valLayer.push_back(curNode->val);
+
+                if(curNode->left)   queue.push_back(curNode->left);
+                if(curNode->right)  queue.push_back(curNode->right);
+            }
+            valArray.push_back(valLayer);
+        }
+        return valArray;
+    }
+};
 ```
 
 #### 32-III. 从上到下打印二叉树（中等）：按之字形逐层打印节点
@@ -1953,33 +2034,252 @@ class Solution:
 ##### 解法一：层次遍历
 
 ```python
+# Python3
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, x):
 #         self.val = x
 #         self.left = None
 #         self.right = None
-
+from typing import List
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        valArray = []
         if not root:
-            return []
-        res = []
-        from collections import deque	# 使用双端队列
-        queue = deque([root])
+            return valArray
+
+        from collections import deque
+        queue = deque()
+        queue.append(root)
+        layerIdx = -1
         while queue:
-            layers = deque()
-            for _ in range(len(queue)):
-                node = queue.popleft()
-                if len(res)%2==1:
-                    layers.appendleft(node.val)		# 这里实现倒序
-                else:
-                    layers.append(node.val)
-                if node.left:   queue.append(node.left)
-                if node.right:  queue.append(node.right)
-            res.append(list(layers))	# 注意这里需要将deque对象转换为list
-        return res
+            length = len(queue)
+            valLayer = []
+            layerIdx+=1
+            for _ in range(length):
+                curNode = queue.popleft()
+                valLayer.append(curNode.val)
+
+                if curNode.left:    queue.append(curNode.left)
+                if curNode.right:   queue.append(curNode.right)
+
+            if layerIdx&1==1:
+                valLayer.reverse()
+            valArray.append(valLayer)
+
+        return valArray
 ```
+
+```c++
+// C++
+#include<iostream>
+#include<vector>
+#include<deque>
+#include<algorithm>
+using namespace std;
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> valArray;
+        if(root==nullptr)   return valArray;
+        
+        deque<TreeNode*> queue;
+        queue.push_back(root);
+        int layerIdx = -1;
+        while(!queue.empty()){
+            int length = queue.size();
+            vector<int> valLayer;
+            layerIdx+=1;
+            for(int i=0; i<length; i++){
+                TreeNode *curNode = queue.front();
+                queue.pop_front();
+                valLayer.push_back(curNode->val);
+
+                if(curNode->left)   queue.push_back(curNode->left);
+                if(curNode->right)  queue.push_back(curNode->right);
+            }
+            if(layerIdx&1==1)
+                reverse(valLayer.begin(), valLayer.end());
+            valArray.push_back(valLayer);
+        }
+        
+        return valArray;
+    }
+};
+```
+
+#### 33. 二叉搜索树的后序遍历序列
+
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回 `true`，否则返回 `false`。假设输入的数组的任意两个数字都互不相同。
+
+ 参考以下这颗二叉搜索树：
+
+```
+     5
+    / \
+   2   6
+  / \
+ 1   3
+```
+
+**示例 1：**
+
+```
+输入: [1,6,3,2,5]
+输出: false
+```
+
+**示例 2：**
+
+```
+输入: [1,3,2,6,5]
+输出: true
+```
+
+ **提示：**
+
+1. `数组长度 <= 1000`
+
+##### 解法一：递归分治
+
+```python
+# Python3
+class Solution:
+    def verifyPostorder(self, postorder):
+        def recur(nums):
+            if len(nums)<=1:    return True
+
+            l, r = 0, len(nums)-1
+            while nums[l]<nums[r]:     l+=1
+            leftTree = nums[0:l]
+            m = l
+            while nums[l]>nums[r]:     l+=1
+            rightTree= nums[m:l]
+            return l==r and recur(leftTree) and recur(rightTree)
+        return recur(postorder)
+```
+
+```c++
+// C++
+#include<iostream> 
+#include<vector>
+using namespace std;
+class Solution {
+public:
+    bool recur(vector<int>& nums){
+        if(nums.size()<=1)  return true;
+        int l=0, r=nums.size()-1;
+        vector<int> leftTree;
+        while(nums[l]<nums[r]){
+            leftTree.push_back(nums[l]);
+            l+=1;
+        }
+        vector<int> rightTree;
+        while(nums[l]>nums[r]){
+            rightTree.push_back(nums[l]);
+            l+=1;
+        }
+        return (l==r) && recur(leftTree) && recur(rightTree);
+    }
+    bool verifyPostorder(vector<int>& postorder) {
+        return recur(postorder);
+    }
+};
+```
+
+##### 解法二：辅助单调栈（TBC）
+
+#### 35. 复杂链表的复制（TBC）
+
+请实现 `copyRandomList` 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 `next` 指针指向下一个节点，还有一个 `random` 指针指向链表中的任意节点或者 `null`。
+
+ **示例 1：**
+
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/01/09/e1.png)
+
+```
+输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/01/09/e2.png)
+
+```
+输入：head = [[1,1],[2,1]]
+输出：[[1,1],[2,1]]
+```
+
+**示例 3：**
+
+**![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/01/09/e3.png)**
+
+```
+输入：head = [[3,null],[3,0],[3,null]]
+输出：[[3,null],[3,0],[3,null]]
+```
+
+**示例 4：**
+
+```
+输入：head = []
+输出：[]
+解释：给定的链表为空（空指针），因此返回 null。
+```
+
+ **提示：**
+
+- `-10000 <= Node.val <= 10000`
+- `Node.random` 为空（null）或指向链表中的节点。
+- 节点数目不超过 1000 。
+
+#### 36. 二叉搜索树与双向链表（TBC）
+
+#### 37. 序列化二叉树（TBC）
+
+请实现两个函数，分别用来序列化和反序列化二叉树。
+
+**示例:** 
+
+```
+你可以将以下二叉树：
+
+    1
+   / \
+  2   3
+     / \
+    4   5
+
+序列化为 "[1,2,3,null,null,4,5]"
+```
+
+#### 38. 字符串的排列（TBC）
+
+输入一个字符串，打印出该字符串中字符的所有排列。
+
+你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。
+
+**示例:**
+
+```
+输入：s = "abc"
+输出：["abc","acb","bac","bca","cab","cba"]
+```
+
+**限制：**
+
+```
+1 <= s 的长度 <= 8
+```
+
+
 
 #### 55-I. 二叉树的深度
 
