@@ -3462,7 +3462,7 @@ public:
 0 <= 数组长度 <= 10^5求1+2+…+n
 ```
 
-#### 64. 求1+2+…+n（TBC）
+#### 64. 求1+2+…+n
 
 求 `1+2+...+n` ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
 
@@ -3483,6 +3483,30 @@ public:
 **限制：**
 
 - `1 <= n <= 10000`
+
+##### 解法一：递归（使用逻辑运算符）
+
+```python
+class Solution:
+    def sumNums(self, n: int) -> int:
+        return n and n+self.sumNums(n-1)	# 使用 and
+    	# return n==1 or n+self.sumNums(n-1)	# 使用 or
+```
+
+```c++
+#include<iostream>
+using namespace std;
+class Solution {
+public:
+    int sumNums(int n) {
+        n && (n+=sumNums(n-1));		// 使用 &&
+        // n==1 || (n+=sumNums(n-1));	//使用 ||
+        return n;
+    }
+};
+```
+
+##### 解法二：快速乘（TBC）
 
 #### 65. 不用加减乘除做加法（TBC）
 
