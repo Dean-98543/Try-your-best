@@ -891,7 +891,31 @@ public:
 };
 ```
 
-##### 解法二：n&(n-1)（TBC）
+##### 解法二：巧用n&(n-1)
+
+```python
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+        res = 0
+        while n:
+            res+=1
+            n&=(n-1)    # 次操作能消去n的二进制形式里最低位的那个1
+        return res
+```
+
+```c++
+class Solution{
+public:
+    int hammingWeight(uint32_t n){
+        int res = 0;
+        while(n){
+            res+=1;
+            n&=(n-1);
+        }
+        return res;
+    }
+};
+```
 
 #### 16. 数值的整数次方
 
@@ -1637,6 +1661,28 @@ B是A的子结构， 即 A中有出现和B相同的结构和节点值。
 ```
 0 <= 节点个数 <= 1000
 ```
+
+##### 解法一：辅助栈（TBC-C++）
+
+```python
+class Solution:
+    def mirrorTree(self, root):
+        """
+        辅助栈或者辅助队列均可，本质为遍历这棵树所有的节点，然后交换pop出的节点的左右节点
+        """
+        if not root:
+            return root
+        stack = []
+        stack.append(root)
+        while stack:
+            node = stack.pop(0)
+            node.left, node.right = node.right, node.left
+            if node.left:       stack.append(node.left)
+            if node.right:      stack.append(node.right)
+        return root
+```
+
+
 
 #### 28. 对称的二叉树（TBC）
 
