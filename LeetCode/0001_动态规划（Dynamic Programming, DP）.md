@@ -6,7 +6,7 @@
 - 确定递推公式（状态转移公式）
 - $dp$数组如何初始化
 - 确定遍历顺序
-- 距离推导$dp$数组
+- 举例推导$dp$数组
 
 #### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
 
